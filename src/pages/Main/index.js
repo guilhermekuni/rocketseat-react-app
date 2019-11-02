@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
 import { Container, Form, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newRepo: '',
-      repositories: [],
-      loading: false,
-    };
-  }
+  state = {
+    newRepo: '',
+    repositories: [],
+    loading: false,
+  };
 
   componentDidMount() {
     const repositories = localStorage.getItem('repositories');
@@ -43,7 +40,7 @@ export default class Main extends Component {
 
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/guilhermekuni/${newRepo}`);
+    const response = await api.get(`/repos/${newRepo}`);
     const data = {
       name: response.data.full_name,
     };
@@ -82,7 +79,9 @@ export default class Main extends Component {
           {repositories.map(repo => (
             <li key={repo.name}>
               <span>{repo.name}</span>
-              <a href="">Detalhes</a>
+              <Link to={`/repository/${encodeURIComponent(repo.name)}`}>
+                Detalhes
+              </Link>
             </li>
           ))}
         </List>
